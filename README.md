@@ -45,5 +45,5 @@ Pastikan Anda telah menginstall:
 
 ### 2. Kloning Repository
 ```bash
-git clone https://github.com/USERNAME_GITHUB_KAMU/it-ticketing-system.git
+git clone https://github.com/Lumineare/it-ticketing-system.git
 cd it-ticketing-system
