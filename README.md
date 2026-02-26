@@ -1,59 +1,49 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🎫 IT Ticketing System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem manajemen tiket bantuan IT (Helpdesk) yang modern, responsif, dan mudah digunakan. Sistem ini memungkinkan karyawan untuk melaporkan masalah teknis tanpa perlu login, sementara tim IT dapat mengelola, melacak, dan menyelesaikan laporan tersebut melalui dashboard admin yang aman.
 
-## About Laravel
+Dibangun menggunakan **Laravel 12** dan **Tailwind CSS**, sistem ini dirancang untuk efisiensi alur kerja dukungan teknis dengan antarmuka yang bersih dan natural.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🚀 Untuk Pengguna Umum (Tanpa Login)
+- **Pelaporan Cepat**: Buat tiket laporan masalah hanya dengan mengisi nama, email, dan deskripsi masalah. Tidak perlu registrasi akun.
+- **Kode Pelacakan Unik**: Setiap laporan mendapatkan kode unik (misal: `TKT-250226-A1B2`) untuk memantau status.
+- **Transparansi Status Real-time**: Pengguna dapat melihat daftar semua tiket dan статус pengerjaannya secara langsung di halaman utama.
+- **Riwayat Detail**: Melihat detail progres, catatan teknisi, dan waktu penyelesaian (Start Date & End Date).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🛡️ Untuk Admin / Tim IT
+- **Autentikasi Aman**: Login khusus staf IT dengan perlindungan role-based access.
+- **Dashboard Manajemen**: Lihat semua tiket masuk dalam format tabel yang rapi (No, Kode, Tanggal, Deskripsi, Status, Note, dll).
+- **Update Status Progres**: Ubah status tiket (Open, In Progress, Resolved, Closed) dengan satu klik.
+- **Catatan Teknisi**: Tambahkan catatan perbaikan yang langsung terlihat oleh pelapor.
+- **Penugasan Otomatis**: Tugaskan tiket ke teknisi tertentu.
+- **Auto End Date**: Waktu penyelesaian tercatat otomatis saat status diubah menjadi "Resolved" atau "Closed".
 
-## Learning Laravel
+## 🛠️ Teknologi yang Digunakan
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- **Backend**: Laravel 12.x (PHP 8.3+)
+- **Frontend**: Blade Templates + Tailwind CSS (via CDN)
+- **Database**: MySQL
+- **Server Lokal**: Laragon (Windows)
+- **Version Control**: Git & GitHub
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 📸 Screenshots
 
-## Laravel Sponsors
+*(Opsional: Kamu bisa menambahkan screenshot nanti setelah kamu upload gambar ke repo)*
+> Tampilan Dashboard Publik & Panel Admin yang bersih dan responsif.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🚀 Instalasi & Menjalankan Proyek
 
-### Premium Partners
+Ikuti langkah berikut untuk menjalankan proyek ini di lingkungan lokal Anda (menggunakan Laragon):
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 1. Prasyarat
+Pastikan Anda telah menginstall:
+- [Laragon](https://laragon.org/) (atau XAMPP/WAMP dengan PHP 8.3+)
+- [Composer](https://getcomposer.org/)
+- [Git](https://git-scm.com/)
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. Kloning Repository
+```bash
+git clone https://github.com/USERNAME_GITHUB_KAMU/it-ticketing-system.git
+cd it-ticketing-system
