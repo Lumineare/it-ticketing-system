@@ -57,3 +57,23 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard khusus admin (opsional, bisa diarahkan ke halaman utama juga)
     Route::get('/admin/dashboard', [TicketController::class, 'publicIndex'])->name('admin.dashboard');
 });
+// ... kode route sebelumnya ...
+
+// ==========================================
+// ROUTE KHUSUS ADMIN SETTINGS (KELOLA DATA)
+// ==========================================
+Route::middleware(['auth'])->prefix('admin/settings')->group(function () {
+    
+    // Cek role admin secara manual di controller atau tambahkan middleware custom jika perlu
+    // Untuk sekarang kita asumsikan user yang login adalah admin
+    
+    // --- Manajemen Unit ---
+    Route::get('/units', [App\Http\Controllers\Admin\SettingController::class, 'units'])->name('admin.settings.units');
+    Route::post('/units', [App\Http\Controllers\Admin\SettingController::class, 'storeUnit'])->name('admin.settings.units.store');
+    Route::delete('/units/{id}', [App\Http\Controllers\Admin\SettingController::class, 'deleteUnit'])->name('admin.settings.units.delete');
+
+    // --- Manajemen Teknisi ---
+    Route::get('/technicians', [App\Http\Controllers\Admin\SettingController::class, 'technicians'])->name('admin.settings.technicians');
+    Route::post('/technicians', [App\Http\Controllers\Admin\SettingController::class, 'storeTechnician'])->name('admin.settings.technicians.store');
+    Route::delete('/technicians/{id}', [App\Http\Controllers\Admin\SettingController::class, 'deleteTechnician'])->name('admin.settings.technicians.delete');
+});

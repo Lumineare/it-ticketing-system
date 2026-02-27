@@ -19,6 +19,7 @@ protected $fillable = [
     'assigned_to',
     'technician_note', // Baru
     'resolved_at',     // Baru
+    'unit_id',        // Baru
     ];
 
     // Agar tanggal otomatis dikonversi ke objek Carbon
@@ -41,6 +42,14 @@ protected $fillable = [
     public function assignedTechnician(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    /**
+     * Relasi ke Unit
+     */
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class);
     }
 
     /**

@@ -6,27 +6,38 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">IT Helpdesk</h1>
-            <p class="text-gray-600 mt-1">Pantau status laporan masalah IT secara real-time.</p>
+            <h1 class="text-3xl font-bold text-gray-800">SI MRT-IT</h1>
+            <p class="text-gray-600 mt-1">Sistem Informasi Maintenance Request And Trouble IT</p>
         </div>
-        <div class="flex gap-3">
+        
+        <div class="flex gap-3 items-center">
+            
             @auth
+                {{-- JIKA SUDAH LOGIN SEBAGAI ADMIN --}}
                 @if(Auth::user()->role === 'admin')
-                    <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium self-center">
-                        Mode Admin Aktif
+                    <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium self-center hidden md:inline-block">
+                        Mode Admin
                     </span>
+                    
                     <form action="{{ route('admin.logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition">
                             Logout
                         </button>
                     </form>
+
+                    <div class="flex gap-2">
+                        <a href="{{ route('admin.settings.units') }}" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">Kelola Unit</a>
+                        <a href="{{ route('admin.settings.technicians') }}" class="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded">Kelola Teknisi</a>
+                    </div>
                 @endif
             @else
+                {{-- JIKA BELUM LOGIN --}}
                 <a href="{{ route('admin.login') }}" class="text-gray-500 hover:text-indigo-600 text-sm font-medium border border-gray-300 px-4 py-2 rounded-md hover:border-indigo-300 transition">
                     Login Staff IT
                 </a>
             @endauth
+
             <a href="{{ route('tickets.public.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium shadow-sm transition">
                 + Buat Laporan
             </a>
@@ -92,13 +103,25 @@
                                 <div class="text-xs text-gray-400">{{ $ticket->created_at->format('l') }}</div>
                             </td>
 
-                            <!-- 4. Deskripsi -->
+                            <!-- 4. Deskripsi & UNIT -->
                             <td class="px-4 py-3 text-left text-gray-700 max-w-xs">
                                 <div class="font-medium text-gray-900 mb-1">{{ Str::limit($ticket->subject, 40) }}</div>
                                 <div class="text-xs text-gray-500 line-clamp-2" title="{{ $ticket->description }}">
                                     {{ Str::limit($ticket->description, 80) }}
                                 </div>
-                                <div class="text-xs text-gray-400 mt-1">Pelapor: {{ $ticket->reporter_name }}</div>
+                                
+                                <div class="flex flex-wrap gap-2 mt-2 items-center">
+                                    @if($ticket->unit)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 border border-indigo-200">
+                                            🏢 {{ $ticket->unit->name }}
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                                            🏢 Umum
+                                        </span>
+                                    @endif
+                                    <span class="text-xs text-gray-400">• {{ $ticket->reporter_name }}</span>
+                                </div>
                             </td>
 
                             <!-- 5. Status -->
@@ -147,22 +170,15 @@
                             @endauth
                         </tr>
                     @empty
-                        {{-- Perbaikan Logika Colspan --}}
                         <tr>
                             @auth
                                 @if(Auth::user()->role === 'admin')
-                                    <td colspan="8" class="px-4 py-10 text-center text-gray-500">
-                                        Belum ada laporan masuk.
-                                    </td>
+                                    <td colspan="8" class="px-4 py-10 text-center text-gray-500">Belum ada laporan masuk.</td>
                                 @else
-                                    <td colspan="7" class="px-4 py-10 text-center text-gray-500">
-                                        Belum ada laporan masuk.
-                                    </td>
+                                    <td colspan="7" class="px-4 py-10 text-center text-gray-500">Belum ada laporan masuk.</td>
                                 @endif
                             @else
-                                <td colspan="7" class="px-4 py-10 text-center text-gray-500">
-                                    Belum ada laporan masuk.
-                                </td>
+                                <td colspan="7" class="px-4 py-10 text-center text-gray-500">Belum ada laporan masuk.</td>
                             @endauth
                         </tr>
                     @endforelse

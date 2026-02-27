@@ -70,7 +70,20 @@
                             Panel Admin
                         </h3>
                     </div>
-                    
+                    <!-- Tambahkan ini di bagian paling atas section content -->
+            @if (session('success'))
+            <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded shadow-sm">
+                <p class="font-bold text-green-800">{{ session('success') }}</p>
+            </div>
+            @endif
+
+            @if (session('error'))
+            <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded shadow-sm">
+                <p class="font-bold text-red-800">{{ session('error') }}</p>
+            </div>
+            @endif
+
+                    <!-- Sisa kode view lainnya... -->
                     <div class="p-4 space-y-4">
                         <form action="{{ route('admin.tickets.updateStatus', $ticket) }}" method="POST">
                             @csrf
@@ -99,7 +112,11 @@
                                 <label class="block text-sm font-medium text-indigo-900 mb-1">Tugaskan Ke</label>
                                 <select name="assigned_to" class="w-full rounded-md border-indigo-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2 bg-white">
                                     <option value="">-- Belum Ditugaskan --</option>
-                                    <option value="{{ Auth::id() }}" {{ $ticket->assigned_to == Auth::id() ? 'selected' : '' }}>Saya ({{ Auth::user()->name }})</option>
+                                         @foreach($technicians as $tech)
+                                    <option value="{{ $tech->id }}" {{ $ticket->assigned_to == $tech->id ? 'selected' : '' }}>
+                                        {{ $tech->name }} ({{ $tech->email }})
+                                    </option>
+                                @endforeach
                                 </select>
                             </div>
 

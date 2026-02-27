@@ -10,7 +10,7 @@
     
     <nav class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-4xl mx-auto px-4 py-4">
-            <h1 class="text-xl font-bold text-gray-800">IT Helpdesk - Lapor Masalah</h1>
+            <h1 class="text-xl font-bold text-gray-800">MRT IT- Lapor Masalah</h1>
         </div>
     </nav>
 
@@ -25,8 +25,8 @@
 
             <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden">
                 <div class="px-6 py-4 bg-indigo-50 border-b border-indigo-100">
-                    <h2 class="text-lg font-bold text-indigo-900">Form Laporan Cepat</h2>
-                    <p class="text-sm text-indigo-700">Isi data di bawah ini, tim IT akan segera merespons.</p>
+                    <h2 class="text-lg font-bold text-indigo-900">SI MRT-IT</h2>
+                    <p class="text-sm text-indigo-700">MAINTENANCE/REQUEST/TROUBLE - IT</p>
                 </div>
 
                 <form action="{{ route('tickets.public.store') }}" method="POST" class="p-6 space-y-5">
@@ -35,28 +35,31 @@
                     <!-- Identitas Pelapor -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
                             <input type="text" name="reporter_name" value="{{ old('reporter_name') }}" required
                                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5">
                             @error('reporter_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Email (untuk kontak balik)</label>
-                            <input type="email" name="reporter_email" value="{{ old('reporter_email') }}" required
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5">
-                            @error('reporter_email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                            <select name="unit_id" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5 bg-white">
+                            <option value="">-- Pilih Unit Anda --</option>
+                            @foreach($units as $unit)
+                                <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
+                            {{ $unit->name }}
+                            </option>
+                            @endforeach
+                            </select>
+                            @error('unit_id')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="text-xs text-gray-500 mt-1">Jika unit Anda belum ada, silakan hubungi admin IT.</p>
                         </div>
                     </div>
 
                     <hr class="border-gray-100">
 
                     <!-- Detail Tiket -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Subjek Masalah</label>
-                        <input type="text" name="subject" value="{{ old('subject') }}" required placeholder="Contoh: WiFi Ruang Meeting Putus-nyambung"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5">
-                        @error('subject') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
