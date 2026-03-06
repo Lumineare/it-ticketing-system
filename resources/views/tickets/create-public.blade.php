@@ -1,94 +1,117 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lapor Masalah IT</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
-    
-    <nav class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-4xl mx-auto px-4 py-4">
-            <h1 class="text-xl font-bold text-gray-800">MRT IT- Lapor Masalah</h1>
+@extends('layouts.public-app')
+
+@section('content')
+<div class="min-h-screen bg-gray-900 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        
+        <!-- Header Form -->
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-extrabold text-white tracking-tight">
+                Buat Laporan Baru
+            </h2>
+            <p class="mt-4 text-lg text-gray-400">
+                Isi formulir di bawah ini untuk melaporkan masalah IT Anda. Tim kami akan segera menindaklanjuti.
+            </p>
         </div>
-    </nav>
 
-    <main class="flex-grow py-10">
-        <div class="max-w-2xl mx-auto px-4">
-            
-            @if (session('success'))
-                <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                    {{ session('success') }}
-                </div>
-            @endif
+        <!-- Card Form -->
+        <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
+                        <form action="{{ route('tickets.public.store') }}" method="POST" class="p-8 space-y-8">
+                @csrf
 
-            <div class="bg-white shadow-md rounded-lg border border-gray-200 overflow-hidden">
-                <div class="px-6 py-4 bg-indigo-50 border-b border-indigo-100">
-                    <h2 class="text-lg font-bold text-indigo-900">SI MRT-IT</h2>
-                    <p class="text-sm text-indigo-700">MAINTENANCE/REQUEST/TROUBLE - IT</p>
-                </div>
-
-                <form action="{{ route('tickets.public.store') }}" method="POST" class="p-6 space-y-5">
-                    @csrf
-                    
-                    <!-- Identitas Pelapor -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
-                            <input type="text" name="reporter_name" value="{{ old('reporter_name') }}" required
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5">
-                            @error('reporter_name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                <!-- Nama Pelapor -->
+                <div>
+                    <!-- Pastikan id="reporter_name" ada di sini -->
+                    <label for="reporter_name" class="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
-                            <select name="unit_id" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5 bg-white">
-                            <option value="">-- Pilih Unit Anda --</option>
-                            @foreach($units as $unit)
-                                <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
-                            {{ $unit->name }}
+                        <!-- Tambahkan id="reporter_name" jika belum ada -->
+                        <input type="text" name="reporter_name" id="reporter_name" required 
+                            value="{{ old('reporter_name') }}"
+                            class="pl-10 block w-full rounded-lg border-gray-600 bg-gray-900 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3 px-4 transition-all border"
+                            placeholder="Masukkan nama Anda">
+                    </div>
+                    @error('reporter_name')<p class="mt-2 text-sm text-red-400">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Unit Kerja -->
+                <div>
+                    <!-- Pastikan id="unit_id" ada di sini -->
+                    <label for="unit_id" class="block text-sm font-medium text-gray-300 mb-2">Unit / Divisi Asal</label>
+                    <!-- Tambahkan id="unit_id" jika belum ada -->
+                    <select name="unit_id" id="unit_id" required 
+                        class="block w-full rounded-lg border-gray-600 bg-gray-900 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3 px-4 transition-all border appearance-none">
+                        <option value="">-- Pilih Unit Anda --</option>
+                        @foreach($units as $unit)
+                            <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
+                                {{ $unit->name }}
                             </option>
-                            @endforeach
-                            </select>
-                            @error('unit_id')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                            <p class="text-xs text-gray-500 mt-1">Jika unit Anda belum ada, silakan hubungi admin IT.</p>
-                        </div>
+                        @endforeach
+                    </select>
+                    @error('unit_id')<p class="mt-2 text-sm text-red-400">{{ $message }}</p>@enderror
+                </div>
+                <!-- Deskripsi -->
+                <div>
+                    <!-- Pastikan id="description" ada di sini -->
+                    <label for="description" class="block text-sm font-medium text-gray-300 mb-2">Deskripsi Detail</label>
+                    <!-- Tambahkan id="description" jika belum ada -->
+                    <textarea name="description" id="description" rows="5" required
+                        class="block w-full rounded-lg border-gray-600 bg-gray-900 text-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm py-3 px-4 transition-all border"
+                        placeholder="Jelaskan kronologi masalah, pesan error...">{{ old('description') }}</textarea>
+                    @error('description')<p class="mt-2 text-sm text-red-400">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Prioritas -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Prioritas</label>
+                    <div class="grid grid-cols-3 gap-4">
+                        
+                        <!-- Pilihan Rendah -->
+                        <label for="priority_low" class="cursor-pointer relative group">
+                            <input type="radio" name="priority" id="priority_low" value="low" {{ old('priority') == 'low' ? 'checked' : '' }} class="peer sr-only">
+                            <div class="rounded-lg border border-gray-600 bg-gray-900 p-4 text-center peer-checked:bg-blue-600 peer-checked:border-blue-500 peer-checked:text-white transition-all hover:bg-gray-800 group-hover:border-gray-500">
+                                <span class="block text-xs font-bold uppercase text-gray-400 peer-checked:text-white">Rendah</span>
+                                <span class="block text-sm font-medium text-gray-300 peer-checked:text-white">Biasa</span>
+                            </div>
+                        </label>
+
+                        <!-- Pilihan Sedang -->
+                        <label for="priority_medium" class="cursor-pointer relative group">
+                            <input type="radio" name="priority" id="priority_medium" value="medium" {{ old('priority') == 'medium' ? 'checked' : '' }} class="peer sr-only">
+                            <div class="rounded-lg border border-gray-600 bg-gray-900 p-4 text-center peer-checked:bg-orange-600 peer-checked:border-orange-500 peer-checked:text-white transition-all hover:bg-gray-800 group-hover:border-gray-500">
+                                <span class="block text-xs font-bold uppercase text-gray-400 peer-checked:text-white">Sedang</span>
+                                <span class="block text-sm font-medium text-gray-300 peer-checked:text-white">Penting</span>
+                            </div>
+                        </label>
+
+                        <!-- Pilihan Tinggi -->
+                        <label for="priority_high" class="cursor-pointer relative group">
+                            <input type="radio" name="priority" id="priority_high" value="high" {{ old('priority') == 'high' ? 'checked' : '' }} class="peer sr-only">
+                            <div class="rounded-lg border border-gray-600 bg-gray-900 p-4 text-center peer-checked:bg-red-600 peer-checked:border-red-500 peer-checked:text-white transition-all hover:bg-gray-800 group-hover:border-gray-500">
+                                <span class="block text-xs font-bold uppercase text-gray-400 peer-checked:text-white">Tinggi</span>
+                                <span class="block text-sm font-medium text-gray-300 peer-checked:text-white">Darurat</span>
+                            </div>
+                        </label>
+
                     </div>
+                    @error('priority')<p class="mt-2 text-sm text-red-400">{{ $message }}</p>@enderror
+                </div>
 
-                    <hr class="border-gray-100">
-
-                    <!-- Detail Tiket -->
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Prioritas</label>
-                        <select name="priority" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5 bg-white">
-                            <option value="low">Low (Tidak Mendesak)</option>
-                            <option value="medium" selected>Medium (Mengganggu Pekerjaan)</option>
-                            <option value="high">High (Darurat / Stop Operasi)</option>
-                        </select>
-                        @error('priority') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi Detail</label>
-                        <textarea name="description" rows="5" required placeholder="Jelaskan masalah secara detail..."
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2.5">{{ old('description') }}</textarea>
-                        @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-
-            <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-100">
-                <!-- Tombol Batal -->
-                <a href="{{ route('tickets.public.index') }}" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition shadow-sm">
-                    Batal
-                </a>
-                
-                <!-- Tombol Kirim -->
-                <button type="submit" class="px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm transition">
-                    Kirim Laporan
-                </button>
+                <!-- Tombol Aksi -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-700">
+                    <button type="submit" class="w-full sm:w-auto flex-1 justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg shadow-blue-500/30 transition transform hover:-translate-y-0.5">
+                        Kirim Laporan
+                    </button>
+                    <a href="{{ route('tickets.public.index') }}" class="w-full sm:w-auto flex-1 justify-center bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium py-3 px-6 rounded-lg border border-gray-600 transition">
+                        Batal
+                    </a>
+                </div>
+            </form>
         </div>
-    </main>
-</body>
-</html>
+
+        <!-- Footer Link -->
+    </div>
+</div>
+@endsection

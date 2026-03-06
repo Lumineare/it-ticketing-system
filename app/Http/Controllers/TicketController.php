@@ -30,39 +30,53 @@ class TicketController extends Controller
         return view('tickets.create-public', compact('units'));
     }
 
-    // 3. Simpan Tiket
+    // 3. Simpan Tiket (SUDAH DIPERBAIKI URUTANNYA)
     public function store(Request $request)
     {
-        // Validasi: Email dihapus, Unit ditambahkan
+        // Validasi input
         $request->validate([
-            'reporter_name' => 'required|string|max:255',//nama pelapor
-            'unit_id'       => 'required|exists:units,id', // Validasi unit harus ada di database
-            'description'   => 'required|string',//deskripsi masalah
-            'priority'      => 'required|in:low,medium,high',//prioritas masalah
+            'reporter_name' => 'required|string|max:255',
+            'unit_id'       => 'required|exists:units,id', 
+            'subject'       => 'required|string|max:255',
+            'description'   => 'required|string',
+            'priority'      => 'required|in:low,medium,high',
         ]);
 
-        // Generate Kode Unik
-        $dateCode = date('ymd');
-        $randomCode = strtoupper(substr(md5(uniqid()), 0, 4));
-        $trackingCode = 'TKT-' . $dateCode . '-' . $randomCode;
+        // --- LOGIKA GENERATE KODE UNIK BARU ---
+        // 1. Ambil tanggal hari ini dalam format YYYYMMDD
+        $dateCode = date('Ymd'); 
+        
+        // 2. Buat string acak 5 karakter (Huruf Besar + Angka)
+        $randomString = strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 5));
+        
+        // 3. Gabungkan menjadi format final: TKT-YYYYMMDD-XXXXX
+        $trackingCode = 'TKT-' . $dateCode . '-' . $randomString;
 
+        // 4. Cek apakah kode sudah pernah dipakai (untuk antisipasi tabrakan sangat jarang)
+        while (Ticket::where('tracking_code', $trackingCode)->exists()) {
+            $randomString = strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 5));
+            $trackingCode = 'TKT-' . $dateCode . '-' . $randomString;
+        }
+        // -------------------------------------
+
+        // 5. BUAT TIKET DULUAN (Ini langkah yang sebelumnya salah urutan)
         $ticket = Ticket::create([
             'user_id'         => null,
             'reporter_name'   => $request->reporter_name,
-            'unit_id'         => $request->unit_id, // Simpan ID Unit
+            'unit_id'         => $request->unit_id, 
             'tracking_code'   => $trackingCode,
-           'subject'         => 'Laporan Masalah Umum',
+            'subject'         => 'Laporan Masalah Umum',
             'description'     => $request->description,
             'priority'        => $request->priority,
             'status'          => 'open',
         ]);
 
-        // SIMPAN ID TIKET KE SESSION AGAR BISA DI-HIGHLIGHT
+        // 6. BARU SIMPAN ID KE SESSION SETELAH TIKET TERBENTUK
         session(['last_created_ticket_id' => $ticket->id]);
 
         // Redirect kembali ke halaman utama dengan pesan sukses
         return redirect()->route('tickets.public.index')
-                         ->with('success', 'Laporan berhasil dibuat! Kode Anda: ' . $trackingCode . ' (Lihat di bawah)');
+                         ->with('success', 'Laporan berhasil dibuat! Kode Anda: <strong>' . $trackingCode . '</strong> (Simpan kode ini)');
     }
 
     // 4. Detail Tiket (Gabungan Public View & Admin Panel)
